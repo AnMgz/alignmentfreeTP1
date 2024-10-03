@@ -16,5 +16,16 @@ def kmer2str(val, k):
 
 
 def stream_kmers(text, k):
-    # --- To complete ---
-    pass
+    """ enumerate_kmer"""
+    mask = (1<<(2(k-1)))-1
+    kmer = text[0:k-1]
+    for i in range(len(text)-(k-1)):
+        yield kmer
+        kmer &= mask
+        kmer <<= 2
+        kmer += encode_nucl(text[i+k])
+    yield kmer
+
+def encode_nucl(letter):
+    encoding = {'A':0, 'C':1, 'T':2, 'G':3}
+    return encoding[letter]
