@@ -14,16 +14,22 @@ def kmer2str(val, k):
     str_val.reverse()
     return "".join(str_val)
 
+def encode_kmer(text, k):
+    kmer = 0
+    for letter in text[0:k]:
+        kmer<<=2
+        kmer += encode_nucl(letter)
+    return kmer
 
 def stream_kmers(text, k):
-    """ enumerate_kmer"""
-    mask = (1<<(2(k-1)))-1
-    kmer = text[0:k-1]
+    """enumerate_kmer"""
+    mask = (1<<(2*(k-1)))-1
+    kmer = encode_kmer(text,k)
     for i in range(len(text)-(k-1)):
         yield kmer
         kmer &= mask
         kmer <<= 2
-        kmer += encode_nucl(text[i+k])
+        kmer += encode_nucl(text[i+k-1])
     yield kmer
 
 def encode_nucl(letter):
