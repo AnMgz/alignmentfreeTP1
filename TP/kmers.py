@@ -25,11 +25,11 @@ def stream_kmers(text, k):
     """enumerate_kmer"""
     mask = (1<<(2*(k-1)))-1
     kmer = encode_kmer(text,k)
-    for i in range(len(text)-(k-1)):
+    for i in range(len(text)-(k)):
         yield kmer
         kmer &= mask
         kmer <<= 2
-        kmer += encode_nucl(text[i+k-1])
+        kmer += encode_nucl(text[i+k])
     yield kmer
 
 def encode_nucl(letter):
