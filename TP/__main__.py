@@ -8,11 +8,10 @@ def compare_kmers(km1,km2):
             return False
     return True
 
-
 def create_index(file, k):
     index = {}
-    for kmer in stream_kmers(file,k):
-        kmer = kmer2str(kmer,k)
+    for idx,km in enumerate(stream_kmers(file,k)):
+        kmer = kmer2str(km,k)
         if kmer in index:
             index[kmer] += 1
         else :
@@ -24,13 +23,15 @@ def jaccard(fileA, fileB, k):
     index = create_index(fileA, k)
     intersect = 0
     union = sum(index.values())
-    for idx,kmer in enumerate(stream_kmers(fileB, k)):
-        kmer = kmer2str(kmer,k)
-        if (kmer in index) and (index[kmer]>0):
+    for idx,kme in enumerate(stream_kmers(fileB, k)):
+        kmer2 = kmer2str(kme,k)
+        if (kmer2 in index) and (index[kmer2]>0):
             intersect += 1
-            index[kmer] -= 1
+            index[kmer2] -= 1
         else:
             union += 1
+    if union == 0 :
+        return 0
     jac = intersect/union
     return jac
 
@@ -44,8 +45,8 @@ if __name__ == "__main__":
 
     print("Computing Jaccard similarity for all pairs of samples")
     filenames = list(files.keys())
+
     for i in range(len(files)):
         for j in range(i+1, len(files)):
-            for m in range(len(files[filenames[j]])):
-                jac = jaccard(files[filenames[i]], files[filenames[j]][m], k)
-                print(filenames[i], filenames[j], jac)
+            jac = jaccard(files[filenames[i]], files[filenames[j]], k)
+            print(filenames[i], filenames[j], jac)
