@@ -48,5 +48,10 @@ if __name__ == "__main__":
 
     for i in range(len(files)):
         for j in range(i+1, len(files)):
-            jac = jaccard(files[filenames[i]], files[filenames[j]], k)
+            p = files[filenames[j]]
+            if len(p) > 1:
+                for l in range (1,len(p),1):
+                    m = [p[0]]
+                    m = [m[0] + p[l]]
+            jac = jaccard(files[filenames[i]], p, k)
             print(filenames[i], filenames[j], jac)
