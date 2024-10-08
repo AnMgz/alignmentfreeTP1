@@ -3,12 +3,20 @@ from TP.kmers import stream_kmers, kmer2str
 
 
 def compare_kmers(km1,km2):
+    """ input:  km1 : 'str' premier kmer
+                km2 : 'str' deuxieme kmer 
+        output : bool 
+        renvoie vrai ou faux dans la comparaison entre les deux kmer"""
     for i in range(len(km1)):
         if km1[i]!=km2[i]:
             return False
     return True
 
 def create_index(file, k):
+    """ input:  file : 'str' sequence
+                k : 'int' taille du kmer 
+        output : index : 'dict' dictionnaire des kmer et nombre d'apparition
+        crée un dico contenant les kmer de taille k de la sequence et le nombre d'apparition"""
     index = {}
     for idx,km in enumerate(stream_kmers(file,k)):
         kmer = kmer2str(km,k)
@@ -19,6 +27,11 @@ def create_index(file, k):
     return index
 
 def jaccard(fileA, fileB, k):
+    """ input:  fileA : 'str' sequence 1
+                fileB : 'str' sequence 2
+                k : 'int' taille du kmer
+        output: jac: 'int' valeur jaccard
+        calcule la valeur jaccard entre deux séquences"""
     jac = 0
     index = create_index(fileA, k)
     intersect = 0
