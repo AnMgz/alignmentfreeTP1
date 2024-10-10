@@ -62,7 +62,6 @@ def jaccard(fileA, fileB, k, s):
     listefB = min_hash(fileB,k,s)
     cptA, cptB = 0, 0
     while ((cptA < s) and (cptB < s)):
-        print(cptA, cptB)
         if listefA[cptA] == listefB[cptB]:
             intersect += 1
             union += 1
@@ -96,5 +95,5 @@ if __name__ == "__main__":
                 for l in range (1,len(p),1):
                     m = [p[0]]
                     m = [m[0] + p[l]]
-            jac = jaccard(files[filenames[i]], p, k, 100)
+            jac = jaccard(files[filenames[i]], p, k, 10000)
             print(filenames[i], filenames[j], jac)
