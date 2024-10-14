@@ -49,7 +49,7 @@ def jaccard(fileA, fileB, k):
     jac = intersect/union
     return jac
 '''
-def jaccard(fileA, fileB, k, s):
+def jaccard(listefA, listefB, k, s):
     """ input:  fileA : 'str' sequence 1
                 fileB : 'str' sequence 2
                 k : 'int' taille du kmer
@@ -58,8 +58,6 @@ def jaccard(fileA, fileB, k, s):
     jac = 0
     intersect = 0
     union = 0
-    listefA = min_hash(fileA,k,s)
-    listefB = min_hash(fileB,k,s)
     cptA, cptB = 0, 0
     while ((cptA < s) and (cptB < s)):
         if listefA[cptA] == listefB[cptB]:
@@ -89,11 +87,14 @@ if __name__ == "__main__":
     filenames = list(files.keys())
 
     for i in range(len(files)):
+        listefA = min_hash(files[filenames[i]],k,10000)
         for j in range(i+1, len(files)):
             p = files[filenames[j]]
             if len(p) > 1:
                 for l in range (1,len(p),1):
                     m = [p[0]]
                     m = [m[0] + p[l]]
-            jac = jaccard(files[filenames[i]], p, k, 10000)
+                p = m
+            listefB = min_hash(p,k,10000)
+            jac = jaccard(listefA, listefB, k, 10000)
             print(filenames[i], filenames[j], jac)
