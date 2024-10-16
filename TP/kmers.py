@@ -20,9 +20,15 @@ def encode_kmer(text, k):
         output: kmer: 'int' encodage du kmer
         encode les kmer de str en int en utilisant les bits"""
     kmer = 0
-    for letter in text[0:k]:
-        kmer<<=2
+    count = 0
+    for letter in text:
+        if letter not in 'ACGT':
+            continue
+        kmer <<= 2
         kmer = kmer + encode_nucl(letter)
+        count += 1
+        if count == k:
+            break
     return kmer
 
 def stream_kmers(text, k):
@@ -31,17 +37,20 @@ def stream_kmers(text, k):
         output: Generator[int] kmer produits
         genere des kmer de taille k a partir de la sequence text"""
     text = text[0]
-    mask = (1<<(2*(k-1)))-1
-    kmer = encode_kmer(text,k)
-    kmer_inv = encode_kmer_rev(kmer,k)
-    for i in range(len(text)-(k)):
+    mask = (1 << (2 * (k - 1))) - 1
+    kmer = encode_kmer(text, k)
+    kmer_inv = encode_kmer_rev(kmer, k)
+    for i in range(len(text) - (k)):
+        if text[i + k] not in 'ACGT':
+            continue
         yield min(xorshift64(kmer), xorshift64(kmer_inv))
         kmer &= mask
         kmer <<= 2
         kmer_inv >>= 2
-        kmer = kmer + encode_nucl(text[i+k])
-        kmer_inv = (encode_nucl(rev_nuc(text[i+k]))<<(2*(k-1))) + kmer_inv
+        kmer = kmer + encode_nucl(text[i + k])
+        kmer_inv = (encode_nucl(rev_nuc(text[i + k])) << (2 * (k - 1))) + kmer_inv
     yield min(xorshift64(kmer), xorshift64(kmer_inv))
+
 
 def encode_nucl(letter):
     """ input:   letter: 'str' nucleotide
